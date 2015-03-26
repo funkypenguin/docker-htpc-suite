@@ -45,13 +45,11 @@ For greater flexibility, you can also manually start each container. The scripts
 
 For example:
 
-{% highlight bash %}
-./scripts/datastore.sh
-./scripts/sabnzbd.sh
-./scripts/plex.sh
-./scripts/couchpotato.sh
-./scripts/nzbdrone.sh
-{% endhighlight %}
+    ./scripts/datastore.sh
+    ./scripts/sabnzbd.sh
+    ./scripts/plex.sh
+    ./scripts/couchpotato.sh
+    ./scripts/nzbdrone.sh
 
 # Planned Enhancements
 
