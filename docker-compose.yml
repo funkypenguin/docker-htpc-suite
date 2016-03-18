@@ -1,7 +1,7 @@
 datastore:
   build: .
   volumes:
-    - /srv/data/Video/Concerts:/data
+    - /srv/data:/data
 sabnzbd:
   image: funkypenguin/sabnzbd
   volumes:
@@ -9,7 +9,7 @@ sabnzbd:
   volumes_from:
     - datastore
   ports:
-    - 8081:8080
+    - 8080:8080
   links:
     - plex
 couchpotato:
@@ -19,7 +19,7 @@ couchpotato:
   volumes_from:
     - datastore
   ports:
-    - 5051:5050
+    - 5050:5050
   links:
     - sabnzbd
     - plex
@@ -30,7 +30,7 @@ plex:
   volumes_from:
     - datastore
   ports:
-    - 32402:32400
+    - 32400:32400
 nzbdrone:
   image: funkypenguin/nzbdrone
   volumes:
@@ -38,7 +38,7 @@ nzbdrone:
   volumes_from:
     - datastore
   ports:
-    - 8990:8989
+    - 8989:8989
   links:
     - sabnzbd
     - plex
