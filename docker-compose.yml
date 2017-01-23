@@ -24,10 +24,10 @@ sabnzbd:
   env_file: uidgid.env
   environment:
     - EDGE=1
-    - DOMAIN_NAME=sabnzbd.funkypenguin.co.nz
-    - VIRTUAL_HOST=sabnzbd.funkypenguin.co.nz
-    - LETSENCRYPT_HOST=sabnzbd.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - DOMAIN_NAME=sabnzbd.yourdomain.com
+    - VIRTUAL_HOST=sabnzbd.yourdomain.com
+    - LETSENCRYPT_HOST=sabnzbd.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
     - VIRTUAL_PORT=8080
   dns:
     - 172.17.0.1
@@ -43,11 +43,11 @@ mylar:
     - datastore
   env_file: uidgid.env
   environment:
-    - DOMAIN_NAME=mylar.funkypenguin.co.nz
+    - DOMAIN_NAME=mylar.yourdomain.com
     - EDGE=1
-    - VIRTUAL_HOST=mylar.funkypenguin.co.nz
-    - LETSENCRYPT_HOST=mylar.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - VIRTUAL_HOST=mylar.yourdomain.com
+    - LETSENCRYPT_HOST=mylar.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
   links:
     - dnsgen
   dns:
@@ -64,11 +64,11 @@ plexrequests:
     - datastore
   env_file: uidgid.env
   environment:
-    - DOMAIN_NAME=plexrequests.funkypenguin.co.nz
+    - DOMAIN_NAME=plexrequests.yourdomain.com
     - EDGE=1
-    - VIRTUAL_HOST=plexrequests.funkypenguin.co.nz
-    - LETSENCRYPT_HOST=plexrequests.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - VIRTUAL_HOST=plexrequests.yourdomain.com
+    - LETSENCRYPT_HOST=plexrequests.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
   links:
     - dnsgen
   dns:
@@ -85,11 +85,11 @@ headphones:
     - datastore
   env_file: uidgid.env
   environment:
-    - DOMAIN_NAME=headphones.funkypenguin.co.nz
+    - DOMAIN_NAME=headphones.yourdomain.com
     - EDGE=1
-    - VIRTUAL_HOST=headphones.funkypenguin.co.nz
-    - LETSENCRYPT_HOST=headphones.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - VIRTUAL_HOST=headphones.yourdomain.com
+    - LETSENCRYPT_HOST=headphones.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
   links:
     - dnsgen
   dns:
@@ -108,11 +108,11 @@ couchpotato:
     - 5050:5050
   env_file: uidgid.env
   environment:
-    - DOMAIN_NAME=couchpotato.funkypenguin.co.nz
+    - DOMAIN_NAME=couchpotato.yourdomain.com
     - EDGE=1
-    - VIRTUAL_HOST=couchpotato.funkypenguin.co.nz
-    - LETSENCRYPT_HOST=couchpotato.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=couchpotato@funkypenguin.co.nz
+    - VIRTUAL_HOST=couchpotato.yourdomain.com
+    - LETSENCRYPT_HOST=couchpotato.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
   links:
     - dnsgen
   dns:
@@ -125,7 +125,7 @@ rtorrent:
   image: funkypenguin/rtorrent
   volumes:
     - /srv/ssd-data/htpc/rtorrent:/config 
-    - /srv/ssd-data/htpc/nginx/htpasswd/rtorrent.funkypenguin.co.nz:/config/.htpasswd
+    - /srv/ssd-data/htpc/nginx/htpasswd/rtorrent.yourdomain.com:/config/.htpasswd
   volumes_from:
     - datastore
   ports:
@@ -133,12 +133,12 @@ rtorrent:
     - 8086:80
   env_file: uidgid.env
   environment:
-    - DOMAIN_NAME=rtorrent.funkypenguin.co.nz
+    - DOMAIN_NAME=rtorrent.yourdomain.com
     - EDGE=1
-    - VIRTUAL_HOST=rtorrent.funkypenguin.co.nz
+    - VIRTUAL_HOST=rtorrent.yourdomain.com
     - VIRTUAL_PORT=80
-    - LETSENCRYPT_HOST=rtorrent.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - LETSENCRYPT_HOST=rtorrent.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
   dns:
     - 172.17.0.1
   links:
@@ -165,11 +165,11 @@ plex:
   environment:
     - EDGE=1
     - VERSION=latest
-    - DOMAIN_NAME=plex.funkypenguin.co.nz
-    - VIRTUAL_HOST=plex.funkypenguin.co.nz
+    - DOMAIN_NAME=plex.yourdomain.com
+    - VIRTUAL_HOST=plex.yourdomain.com
     - VIRTUAL_PORT=32400
-    - LETSENCRYPT_HOST=plex.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - LETSENCRYPT_HOST=plex.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
   dns:
     - 172.17.0.1
   links:
@@ -184,7 +184,7 @@ htpc-cron:
   volumes_from:
     - datastore
   environment:
-    - DOMAIN_NAME=htpc-cron.funkypenguin.co.nz
+    - DOMAIN_NAME=htpc-cron.yourdomain.com
   dns:
     - 172.17.0.1
   links:
@@ -201,10 +201,10 @@ sonarr:
     - 8989:8989
   env_file: uidgid.env
   environment:
-    - DOMAIN_NAME=sonarr.funkypenguin.co.nz
-    - VIRTUAL_HOST=sonarr.funkypenguin.co.nz
-    - LETSENCRYPT_HOST=sonarr.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - DOMAIN_NAME=sonarr.yourdomain.com
+    - VIRTUAL_HOST=sonarr.yourdomain.com
+    - LETSENCRYPT_HOST=sonarr.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
   dns:
     - 172.17.0.1
   links:
@@ -223,10 +223,10 @@ plexpy:
     - 8181:8181
   env_file: uidgid.env
   environment:
-    - DOMAIN_NAME=plexpy.funkypenguin.co.nz
-    - VIRTUAL_HOST=plexpy.funkypenguin.co.nz
-    - LETSENCRYPT_HOST=plexpy.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - DOMAIN_NAME=plexpy.yourdomain.com
+    - VIRTUAL_HOST=plexpy.yourdomain.com
+    - LETSENCRYPT_HOST=plexpy.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
   dns:
     - 172.17.0.1
   links:
@@ -244,10 +244,10 @@ nzbhydra:
     - 5075:5075
   env_file: uidgid.env
   environment:
-    - DOMAIN_NAME=nzbhydra.funkypenguin.co.nz
-    - VIRTUAL_HOST=nzbhydra.funkypenguin.co.nz
-    - LETSENCRYPT_HOST=nzbhydra.funkypenguin.co.nz
-    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - DOMAIN_NAME=nzbhydra.yourdomain.com
+    - VIRTUAL_HOST=nzbhydra.yourdomain.com
+    - LETSENCRYPT_HOST=nzbhydra.yourdomain.com
+    - LETSENCRYPT_EMAIL=youremail@yourdomain.com
   dns:
     - 172.17.0.1
   links:
