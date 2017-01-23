@@ -1,44 +1,255 @@
+dnsgen:
+    image: jderusse/dns-gen
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+        - 172.17.0.1:53:53/udp
+    restart: always
+
 datastore:
   build: .
   volumes:
-    - /srv/data:/data
+    - /srv/data/:/data
+    - /srv/ssd-data/htpc/:/htpc
+  restart: always
+
 sabnzbd:
-  image: funkypenguin/sabnzbd
+  image: funkypenguin/sabnzbd:latest
   volumes:
-    - sabnzbd:/config
+    - ./sabnzbd:/config
   volumes_from:
     - datastore
   ports:
-    - 8080:8080
+    - 8082:8080
+  env_file: uidgid.env
+  environment:
+    - EDGE=1
+    - DOMAIN_NAME=sabnzbd.funkypenguin.co.nz
+    - VIRTUAL_HOST=sabnzbd.funkypenguin.co.nz
+    - LETSENCRYPT_HOST=sabnzbd.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+    - VIRTUAL_PORT=8080
+  dns:
+    - 172.17.0.1
   links:
-    - plex
-couchpotato:
-  image: funkypenguin/couchpotato
+    - dnsgen
+  restart: always
+
+mylar:
+  image: linuxserver/mylar:latest
   volumes:
-    - couchpotato:/config
+    - ./mylar:/config
+  volumes_from:
+    - datastore
+  env_file: uidgid.env
+  environment:
+    - DOMAIN_NAME=mylar.funkypenguin.co.nz
+    - EDGE=1
+    - VIRTUAL_HOST=mylar.funkypenguin.co.nz
+    - LETSENCRYPT_HOST=mylar.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+  links:
+    - dnsgen
+  dns:
+    - 172.17.0.1
+  links:
+    - dnsgen
+  restart: always
+
+plexrequests:
+  image: linuxserver/plexrequests:latest
+  volumes:
+    - ./plexrequests:/config
+  volumes_from:
+    - datastore
+  env_file: uidgid.env
+  environment:
+    - DOMAIN_NAME=plexrequests.funkypenguin.co.nz
+    - EDGE=1
+    - VIRTUAL_HOST=plexrequests.funkypenguin.co.nz
+    - LETSENCRYPT_HOST=plexrequests.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+  links:
+    - dnsgen
+  dns:
+    - 172.17.0.1
+  links:
+    - dnsgen
+  restart: always
+
+headphones:
+  image: linuxserver/headphones:latest
+  volumes:
+    - ./headphones:/config
+  volumes_from:
+    - datastore
+  env_file: uidgid.env
+  environment:
+    - DOMAIN_NAME=headphones.funkypenguin.co.nz
+    - EDGE=1
+    - VIRTUAL_HOST=headphones.funkypenguin.co.nz
+    - LETSENCRYPT_HOST=headphones.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+  links:
+    - dnsgen
+  dns:
+    - 172.17.0.1
+  links:
+    - dnsgen
+  restart: always
+
+couchpotato:
+  image: linuxserver/couchpotato:latest
+  volumes:
+    - ./couchpotato:/config
   volumes_from:
     - datastore
   ports:
     - 5050:5050
+  env_file: uidgid.env
+  environment:
+    - DOMAIN_NAME=couchpotato.funkypenguin.co.nz
+    - EDGE=1
+    - VIRTUAL_HOST=couchpotato.funkypenguin.co.nz
+    - LETSENCRYPT_HOST=couchpotato.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=couchpotato@funkypenguin.co.nz
   links:
-    - sabnzbd
-    - plex
-plex:
-  image: funkypenguin/plex
+    - dnsgen
+  dns:
+    - 172.17.0.1
+  links:
+    - dnsgen
+  restart: always
+
+rtorrent:
+  image: funkypenguin/rtorrent
   volumes:
-    - plex:/config
+    - /srv/ssd-data/htpc/rtorrent:/config 
+    - /srv/ssd-data/htpc/nginx/htpasswd/rtorrent.funkypenguin.co.nz:/config/.htpasswd
   volumes_from:
     - datastore
   ports:
-    - 32400:32400
-nzbdrone:
-  image: funkypenguin/nzbdrone
+    - 36898:36898
+    - 8086:80
+  env_file: uidgid.env
+  environment:
+    - DOMAIN_NAME=rtorrent.funkypenguin.co.nz
+    - EDGE=1
+    - VIRTUAL_HOST=rtorrent.funkypenguin.co.nz
+    - VIRTUAL_PORT=80
+    - LETSENCRYPT_HOST=rtorrent.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+  dns:
+    - 172.17.0.1
+  links:
+    - dnsgen
+
+plex:
+  image: linuxserver/plex
   volumes:
-    - nzbdrone:/config
+    - ./plex:/config
+  volumes_from:
+    - datastore
+  ports:
+    - 32469:32469
+    - 32400:32400
+    - 32401:32401
+    - 3005:3005
+    - 8324:8324
+    - 1900:1900/udp
+    - 32410:32410/udp
+    - 32412:32412/udp
+    - 32413:32413/udp
+    - 32414:32414/udp
+  env_file: uidgid.env
+  environment:
+    - EDGE=1
+    - VERSION=latest
+    - DOMAIN_NAME=plex.funkypenguin.co.nz
+    - VIRTUAL_HOST=plex.funkypenguin.co.nz
+    - VIRTUAL_PORT=32400
+    - LETSENCRYPT_HOST=plex.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+  dns:
+    - 172.17.0.1
+  links:
+    - dnsgen
+  restart: always
+
+htpc-cron:
+  image: funkypenguin/htpc-cron
+  volumes:
+    - ./htpc-cron:/config 
+    - /usr/share/zoneinfo/Pacific/Auckland:/etc/localtime:ro
+  volumes_from:
+    - datastore
+  environment:
+    - DOMAIN_NAME=htpc-cron.funkypenguin.co.nz
+  dns:
+    - 172.17.0.1
+  links:
+    - dnsgen
+  restart: always
+
+sonarr:
+  image: linuxserver/sonarr
+  volumes:
+    - ./sonarr:/config
   volumes_from:
     - datastore
   ports:
     - 8989:8989
+  env_file: uidgid.env
+  environment:
+    - DOMAIN_NAME=sonarr.funkypenguin.co.nz
+    - VIRTUAL_HOST=sonarr.funkypenguin.co.nz
+    - LETSENCRYPT_HOST=sonarr.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+  dns:
+    - 172.17.0.1
   links:
-    - sabnzbd
-    - plex
+    - dnsgen
+  restart: always
+
+plexpy:
+  image: linuxserver/plexpy
+  volumes:
+    - ./plexpy:/config
+    - /usr/share/zoneinfo/Pacific/Auckland:/etc/localtime:ro
+    - /srv/ssd-data/htpc/plex/Library/Application\ Support/Plex\ Media\ Server/Logs:/logs:ro  
+  volumes_from:
+    - datastore
+  ports:
+    - 8181:8181
+  env_file: uidgid.env
+  environment:
+    - DOMAIN_NAME=plexpy.funkypenguin.co.nz
+    - VIRTUAL_HOST=plexpy.funkypenguin.co.nz
+    - LETSENCRYPT_HOST=plexpy.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+  dns:
+    - 172.17.0.1
+  links:
+    - dnsgen
+  restart: always
+
+nzbhydra:
+  image: linuxserver/hydra
+  volumes:
+    - ./nzbhydra:/config
+    - /usr/share/zoneinfo/Pacific/Auckland:/etc/localtime:ro
+  volumes_from:
+    - datastore
+  ports:
+    - 5075:5075
+  env_file: uidgid.env
+  environment:
+    - DOMAIN_NAME=nzbhydra.funkypenguin.co.nz
+    - VIRTUAL_HOST=nzbhydra.funkypenguin.co.nz
+    - LETSENCRYPT_HOST=nzbhydra.funkypenguin.co.nz
+    - LETSENCRYPT_EMAIL=davidy@funkypenguin.co.nz
+  dns:
+    - 172.17.0.1
+  links:
+    - dnsgen
+  restart: always
